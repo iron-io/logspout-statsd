@@ -58,12 +58,12 @@ func (a *StatsdAdapter) Stream(logstream chan *router.Message) {
 
 		m := &Metric{}
 		if err := logfmt.Unmarshal([]byte(message.Data), m); err != nil {
-			log.Println("not in logfmt format, skipping")
+			// log.Println("not in logfmt format, skipping")
 			continue
 		}
 		// log.Println("metric:", *m)
 		if m.Metric == "" {
-			log.Println("not a metric, skipping")
+			// log.Println("not a metric, skipping")
 			continue
 		}
 		if m.Metric != "" {
@@ -72,8 +72,6 @@ func (a *StatsdAdapter) Stream(logstream chan *router.Message) {
 				a.statsBuffer.Incr(m.Metric, m.Value)
 			case "gauge":
 				a.statsBuffer.Gauge(m.Metric, m.Value)
-			default:
-				// a.writeThru(message)
 			}
 		}
 
