@@ -58,7 +58,7 @@ curl http://localhost:8000/routes -d '{
 }'
 ```
 
-Now run our emitter image to test:
+Now run our [emitter image](https://github.com/iron-io/logspout-statsd/tree/master/test/stats-emitter) to test:
 
 ```sh
 docker run --rm iron/emitter 
@@ -66,12 +66,19 @@ docker run --rm iron/emitter
 
 You should see some logging messages in papertrail and some metrics in graphite!
 
+Any log line from any container that contains a `metric` key will be forwarded to statsd, so your applications should output log lines like this:
+
+```
+metric=someevent value=1 type=count
+metric=somegauge value=50 type=gauge
+```
+
 ## Development of this module
 
-See iron-io's fork of logspout and read MODULES.md
+See iron-io's fork of logspout and read MODULES.md.
 
 Copy run-logspout.sh to the logspout dir and run it with:
 
 ```sh
-STATSD_HOST=192.168.99.100:8125 SYSLOG=syslog://logs.papertrailapp.com:55555 ./run-logspout.sh`
+SYSLOG=syslog://logs.papertrailapp.com:55555 ./run-logspout.sh`
 ```
